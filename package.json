@@ -3,7 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "ENVFILE=.env react-native run-android --appIdSuffix=dev",
+    "android-dev": "ENVFILE=.env.dev react-native run-android",
+    "android-stage": "ENVFILE=.env.stage react-native run-android",
+    "build-android-dev": "cd ./android && ENVFILE=.env.dev ./gradlew assembleDevRelease && cd ../",
+    "build-android-stage": "cd ./android && ENVFILE=.env.stage ./gradlew assembleStageRelease && cd ../",
+    "build-android-production": "cd ./android && ENVFILE=.env.production ./gradlew assembleRelease && cd ../",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -11,9 +16,12 @@
   },
   "dependencies": {
     "@react-native-community/geolocation": "^2.1.0",
+    "@types/react-native-dotenv": "^0.2.0",
     "expo-location": "^14.2.2",
     "react": "18.0.0",
     "react-native": "0.69.2",
+    "react-native-config": "^1.4.6",
+    "react-native-dotenv": "^3.3.1",
     "react-native-localize": "^2.2.2",
     "react-native-permissions": "^3.6.0"
   },

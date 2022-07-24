@@ -14,6 +14,7 @@ import Geolocation, {
   GeolocationError,
   GeolocationResponse,
 } from '@react-native-community/geolocation';
+import Config from 'react-native-config';
 const {width: SCREEN_SIZE} = Dimensions.get('window');
 
 const App = () => {
@@ -21,8 +22,6 @@ const App = () => {
   const [days, setDays] = useState([]);
   const [lat, setLat] = useState<number>();
   const [lon, setLon] = useState<number>();
-
-  const API_KEY = 'd2c13dc71f101c758db158a753e40903';
 
   useEffect(() => {
     if (Platform.OS === 'android') {
@@ -73,6 +72,8 @@ const App = () => {
     }
   }, []);
 
+  const API_KEY = '';
+
   const getCityName = (): Promise<string> => {
     return new Promise((resolve, reject) => {
       Geolocation.getCurrentPosition(
@@ -89,7 +90,6 @@ const App = () => {
             `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=alerts&appid=${API_KEY}`,
           );
           const json = await res.json();
-          console.log(json);
           setCity(responseJson.city);
         },
         async (_error: GeolocationError) => {},
