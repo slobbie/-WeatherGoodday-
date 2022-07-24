@@ -1324,6 +1324,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.2.0.tgz#7d6d789ae8edf73dc9bed1246cd48277edea8066"
   integrity sha512-o6aam+0Ug1xGK3ABYmBm0B1YuEKfM/5kaoZO0eHbZwSpw9UzDX4G5y4Nx/K20FHqUmJHkZmLvOUFYwN4N+HqKA==
 
+"@react-native-community/geolocation@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/geolocation/-/geolocation-2.1.0.tgz#3ed15a4a357104a53c0bb824f47b59cb2a65b6ba"
+  integrity sha512-xDAl5S85cRVGeUxpjX/+5lyVFNHHArXN18NQnfzCLxxiVxtC2sKENuLE4J0kjAlD5lEp+IXVqfd3iGQfo99tkA==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -5783,6 +5788,16 @@ react-native-gradle-plugin@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.7.tgz#96602f909745239deab7b589443f14fce5da2056"
   integrity sha512-+4JpbIx42zGTONhBTIXSyfyHICHC29VTvhkkoUOJAh/XHPEixpuBduYgf6Y4y9wsN1ARlQhBBoptTvXvAFQf5g==
+
+react-native-localize@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.2.2.tgz#a1c6369000c9dae6800eded8ddb1673bf090f84e"
+  integrity sha512-j9aAYyuZblq27XPW3h/cZuBP2WA1OOsEPjTHszPQ/YcM9VrrrYnfpJObP4IyghxmS8i+7Jhoh7qp8CjunfrFjw==
+
+react-native-permissions@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.0.tgz#4b284b6374fdb8b9b6702c6a0719bfb1a97aa7ff"
+  integrity sha512-aiancYU5eAC3lCtdAFNz/8OQAShAXSgFJAcNrsspXiMulL4zjClIa52uWMi5NTU4skU0KoWG5rCfqjxWAkJL8w==
 
 react-native@0.69.2:
   version "0.69.2"

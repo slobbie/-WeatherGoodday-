@@ -10,9 +10,12 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.1.0",
     "expo-location": "^14.2.2",
     "react": "18.0.0",
-    "react-native": "0.69.2"
+    "react-native": "0.69.2",
+    "react-native-localize": "^2.2.2",
+    "react-native-permissions": "^3.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

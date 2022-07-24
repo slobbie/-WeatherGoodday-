@@ -1,17 +1,115 @@
-import React, {useEffect} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
-import * as Location from 'expo-location';
-
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  Dimensions,
+  Linking,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import Geolocation, {
+  GeolocationError,
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
 const {width: SCREEN_SIZE} = Dimensions.get('window');
 
 const App = () => {
-  const [location, setLocation] = React.useState();
-  let status = Location.requestForegroundPermissionsAsync();
-  console.log(status);
+  const [city, setCity] = useState();
+  const [days, setDays] = useState([]);
+  const [lat, setLat] = useState<number>();
+  const [lon, setLon] = useState<number>();
+
+  const API_KEY = 'd2c13dc71f101c758db158a753e40903';
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+        .then(result => {
+          console.log('check location', result);
+          if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {
+            Alert.alert(
+              '이 앱은 위치 권한 허용이 필요합니다.',
+              '앱 설정 화면을 열어서 항상 허용으로 바꿔주세요.',
+              [
+                {
+                  text: '네',
+                  onPress: () => Linking.openSettings(),
+                },
+                {
+                  text: '아니오',
+                  onPress: () => console.log('No Pressed'),
+                  style: 'cancel',
+                },
+              ],
+            );
+          }
+        })
+        .catch(console.error);
+    } else if (Platform.OS === 'ios') {
+      check(PERMISSIONS.IOS.LOCATION_ALWAYS)
+        .then(result => {
+          // if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {
+          //   Alert.alert(
+          //     '이 앱은 백그라운드 위치 권한 허용이 필요합니다.',
+          //     '앱 설정 화면을 열어서 항상 허용으로 바꿔주세요.',
+          //     [
+          //       {
+          //         text: '네',
+          //         onPress: () => Linking.openSettings(),
+          //       },
+          //       {
+          //         text: '아니오',
+          //         onPress: () => console.log('No Pressed'),
+          //         style: 'cancel',
+          //       },
+          //     ],
+          //   );
+          // }
+        })
+        .catch(console.error);
+    }
+  }, []);
+
+  const getCityName = (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        async ({coords}: GeolocationResponse) => {
+          setLat(coords.latitude);
+          setLon(coords.longitude);
+
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ko`,
+          );
+          const responseJson = await response.json();
+
+          const res = await fetch(
+            `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=alerts&appid=${API_KEY}`,
+          );
+          const json = await res.json();
+          console.log(json);
+          setCity(responseJson.city);
+        },
+        async (_error: GeolocationError) => {},
+        {
+          enableHighAccuracy: false,
+          timeout: 2000,
+          maximumAge: 3600000,
+        },
+      );
+    });
+  };
+
+  useEffect(() => {
+    getCityName();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Seoul</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
       <ScrollView
         pagingEnabled
