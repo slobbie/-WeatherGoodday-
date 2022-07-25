@@ -14,12 +14,28 @@ import Geolocation, {
   GeolocationError,
   GeolocationResponse,
 } from '@react-native-community/geolocation';
-import Config from 'react-native-config';
+
 const {width: SCREEN_SIZE} = Dimensions.get('window');
+
+interface weather {
+  description: string;
+  icon: string;
+  id: number;
+  main: string;
+}
+
+interface WeatherData {
+  weather: weather[];
+  dt_txt: string;
+}
+
+interface DaysData {
+  list: WeatherData[];
+}
 
 const App = () => {
   const [city, setCity] = useState();
-  const [days, setDays] = useState([]);
+  const [days, setDays] = useState<DaysData>();
   const [lat, setLat] = useState<number>();
   const [lon, setLon] = useState<number>();
 
@@ -87,10 +103,11 @@ const App = () => {
           const responseJson = await response.json();
 
           const res = await fetch(
-            `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=alerts&appid=${API_KEY}`,
+            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`,
           );
-          const json = await res.json();
+          const json: DaysData = await res.json();
           setCity(responseJson.city);
+          setDays(json);
         },
         async (_error: GeolocationError) => {},
         {
@@ -105,6 +122,9 @@ const App = () => {
   useEffect(() => {
     getCityName();
   }, []);
+  console.log(days?.list);
+
+  // http://openweathermap.org/img/wn/10d@2x.png
 
   return (
     <View style={styles.container}>
@@ -116,25 +136,14 @@ const App = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.weather}>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.dec}>Sunny</Text>
-        </View>
-
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.dec}>Sunny</Text>
-        </View>
-
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.dec}>Sunny</Text>
-        </View>
-
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.dec}>Sunny</Text>
-        </View>
+        {days?.list.map((day, index) => {
+          return (
+            <View key={index} style={styles.day}>
+              {/* <Text style={styles.temp}>{day.dt_txt[0]}</Text> */}
+              <Text style={styles.dec}>{day.weather[0].main}</Text>
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
