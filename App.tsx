@@ -14,6 +14,7 @@ import Geolocation, {
   GeolocationError,
   GeolocationResponse,
 } from '@react-native-community/geolocation';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const {width: SCREEN_SIZE} = Dimensions.get('window');
 
@@ -88,7 +89,7 @@ const App = () => {
     }
   }, []);
 
-  const API_KEY = '';
+  const API_KEY = 'd2c13dc71f101c758db158a753e40903';
 
   const getCityName = (): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -122,7 +123,6 @@ const App = () => {
   useEffect(() => {
     getCityName();
   }, []);
-  console.log(days?.list);
 
   // http://openweathermap.org/img/wn/10d@2x.png
 
@@ -136,14 +136,23 @@ const App = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.weather}>
-        {days?.list.map((day, index) => {
-          return (
-            <View key={index} style={styles.day}>
-              {/* <Text style={styles.temp}>{day.dt_txt[0]}</Text> */}
-              <Text style={styles.dec}>{day.weather[0].main}</Text>
-            </View>
-          );
-        })}
+        <View style={styles.day}>
+          <Text style={styles.temp}>1</Text>
+          <Text style={styles.dec}>맑은</Text>
+          <Icon name="cloudo" size={30} color="#fff" />
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>2</Text>
+          <Text style={styles.dec}>흐림</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>3</Text>
+          <Text style={styles.dec}>비옴</Text>
+        </View>
+        <View style={styles.day}>
+          <Text style={styles.temp}>4</Text>
+          <Text style={styles.dec}>구름</Text>
+        </View>
       </ScrollView>
     </View>
   );
