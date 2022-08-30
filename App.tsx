@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Dimensions,
+  Image,
   Linking,
   Platform,
   ScrollView,
@@ -31,7 +32,14 @@ interface WeatherData {
 }
 
 interface DaysData {
-  list: WeatherData[];
+  weather: Iweather[];
+}
+
+interface Iweather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
 }
 
 const App = () => {
@@ -104,11 +112,12 @@ const App = () => {
           const responseJson = await response.json();
 
           const res = await fetch(
-            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`,
+            `https://api.openweathermap.org/data/2.5/weather?lat=37.335&lon=-122.0327&appid=${API_KEY}`,
           );
           const json: DaysData = await res.json();
           setCity(responseJson.city);
           setDays(json);
+          console.log(json, 'day');
         },
         async (_error: GeolocationError) => {},
         {
@@ -122,6 +131,31 @@ const App = () => {
 
   useEffect(() => {
     getCityName();
+    // Geolocation.getCurrentPosition(
+    //   async ({coords}: GeolocationResponse) => {
+    //     setLat(coords.latitude);
+    //     setLon(coords.longitude);
+
+    //     const response = await fetch(
+    //       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ko`,
+    //     );
+    //     const responseJson = await response.json();
+
+    //     const res = await fetch(
+    //       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lat}&appid=${API_KEY}`,
+    //     );
+    //     const json: DaysData = await res.json();
+    //     setCity(responseJson.city);
+    //     setDays(json);
+    //     console.log(json, 'day');
+    //   },
+    //   async (_error: GeolocationError) => {},
+    //   {
+    //     enableHighAccuracy: false,
+    //     timeout: 2000,
+    //     maximumAge: 3600000,
+    //   },
+    // );
   }, []);
 
   // http://openweathermap.org/img/wn/10d@2x.png
@@ -136,9 +170,24 @@ const App = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.weather}>
+        {days?.weather.map(item => {
+          return (
+            <View style={styles.day}>
+              <Text style={styles.temp}>{item.main}</Text>
+              <Text style={styles.dec}>{item.description}</Text>
+              <Image
+                style={styles.tinyLogo}
+                source={{
+                  uri: `https://openweathermap.org/img/wn/${item.icon}@2x.png`,
+                }}
+              />
+            </View>
+          );
+        })}
+        {/* <Icon name="cloudo" size={30} color="#fff" /> */}
         <View style={styles.day}>
           <Text style={styles.temp}>1</Text>
-          <Text style={styles.dec}>맑은</Text>
+          <Text style={styles.dec}>맑</Text>
           <Icon name="cloudo" size={30} color="#fff" />
         </View>
         <View style={styles.day}>
@@ -161,7 +210,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'tomato',
+    backgroundColor: '#0064FF',
   },
   city: {
     flex: 1,
@@ -171,6 +220,7 @@ const styles = StyleSheet.create({
   cityName: {
     fontSize: 68,
     fontWeight: '500',
+    color: '#fff',
   },
   weather: {
     // backgroundColor: 'teal',
@@ -181,11 +231,18 @@ const styles = StyleSheet.create({
   },
   temp: {
     marginTop: 50,
-    fontSize: 178,
+    marginBottom: 20,
+    fontSize: 100,
+    color: '#fff',
   },
   dec: {
-    fontSize: 60,
+    fontSize: 50,
     marginTop: -30,
+    color: '#fff',
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   },
 });
 
